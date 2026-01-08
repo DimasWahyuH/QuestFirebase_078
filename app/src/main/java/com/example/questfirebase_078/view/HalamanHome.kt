@@ -48,7 +48,7 @@ import com.example.questfirebase_078.viewmodel.StatusUiSiswa
 @Composable
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
-    navigateToItemUpdate: (String) -> Unit,
+    navigateToItemUpdate: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
@@ -89,7 +89,7 @@ fun HomeScreen(
 @Composable
 fun HomeBody(
     statusUiSiswa: StatusUiSiswa,
-    onSiswaClick: (String) -> Unit,
+    onSiswaClick: (Int) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -100,7 +100,7 @@ fun HomeBody(
             is StatusUiSiswa.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
             is StatusUiSiswa.Success -> DaftarSiswa(
                 itemSiswa = statusUiSiswa.siswa,
-                onSiswaClick = { onSiswaClick(it.id.toString()) },
+                onSiswaClick = { onSiswaClick(it.id.toInt()) },
                 modifier = Modifier.fillMaxSize()
             )
             is StatusUiSiswa.Error -> ErrorScreen(
@@ -145,11 +145,12 @@ fun DaftarSiswa(
     onSiswaClick: (Siswa) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier,
+    LazyColumn(modifier = modifier,
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
-        items(items = itemSiswa, key = { it.id }) { person ->
+        items(
+            items = itemSiswa
+        ) { person ->
             ItemSiswa(
                 siswa = person,
                 modifier = Modifier
