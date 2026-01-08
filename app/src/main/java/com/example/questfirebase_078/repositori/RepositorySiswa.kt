@@ -11,7 +11,7 @@ interface RepositorySiswa {
     suspend fun getSatuSiswa(id : Long): Siswa?
 
     suspend fun editSatuSiswa(id: Long, siswa:Siswa)
-
+    suspend fun hapusSatuSiswa(id: Long)
 }
 class FirebaseRepositorySiswa : RepositorySiswa {
     private val db = FirebaseFirestore.getInstance()
@@ -74,7 +74,12 @@ class FirebaseRepositorySiswa : RepositorySiswa {
         ).await()
     }
 
-
+    override suspend fun hapusSatuSiswa(id: Long) {
+        val docQuery = collection.whereEqualTo("id", id).get().await()
+        val docId = docQuery.documents.firstOrNull()?.id ?:return
+        collection.document(docId).delete().await()
+    }
+ }
 
 
 
